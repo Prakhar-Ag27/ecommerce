@@ -34,7 +34,7 @@ public class CheckoutPage extends JFrame {
 
         setTitle("Checkout Page");
         setSize(300, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         add(panel);

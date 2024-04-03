@@ -14,7 +14,7 @@ public class wallet extends JFrame {
     public wallet() {
         setTitle("Wallet Balance");
         setSize(500, 500); // Reduced frame size for demonstration
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
 
         // Initialize components
         balanceLabel = new JLabel("Balance: $" + balance);

@@ -39,7 +39,7 @@ public class UserPage implements ActionListener {
         walletButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Clicked Wallet");
+                new wallet();
             }
         });
 
@@ -55,7 +55,7 @@ public class UserPage implements ActionListener {
         shoppingCart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Clicked Shopping cart");
+                new CheckoutPage();
             }
         });
 
