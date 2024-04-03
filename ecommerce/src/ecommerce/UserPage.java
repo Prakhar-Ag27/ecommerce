@@ -20,8 +20,9 @@ public class UserPage implements ActionListener {
 		search.setBackground(Color.WHITE);
 		searchButton = new JButton("Search");
 		JTextField searchBox = new JTextField();
-		searchBox.setPreferredSize(new Dimension(300, 30)); // Adjust search box size
-		searchButton.setPreferredSize(new Dimension(100, 30)); // Adjust search button size
+		searchBox.setPreferredSize(new Dimension(300, 40)); // Adjust search box size
+		searchButton.setPreferredSize(new Dimension(100, 40)); // Adjust search button size
+		searchButton.setFocusable(false);
 		searchButton.addActionListener(this);
 		search.add(searchBox);
 		search.add(searchButton);
@@ -41,6 +42,22 @@ public class UserPage implements ActionListener {
 				System.out.println("Clicked Wallet");
 			}
 		});
+		
+		ImageIcon shoppingCartImg = new ImageIcon("src/img/shoppingCart.png");
+		JButton shoppingCart = new JButton();
+		shoppingCart.setText("Shopping Cart");
+		Image scaledCartImage = shoppingCartImg.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon scaledCartIcon = new ImageIcon(scaledCartImage);
+		shoppingCart.setIcon(scaledCartIcon);
+		shoppingCart.setHorizontalTextPosition(JButton.RIGHT);
+		shoppingCart.setVerticalTextPosition(JButton.CENTER);
+		shoppingCart.setFocusable(false);
+		shoppingCart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Clicked Shopping cart");
+			}
+		});
 
 		ImageIcon originalIcon = new ImageIcon("src/img/logo.jpg");
 		Image scaledAppImage = originalIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -49,7 +66,7 @@ public class UserPage implements ActionListener {
 		app.setIcon(scaledAppIcon);
 
 		userAvatarButton = new JButton("Username");
-		userAvatarButton.setPreferredSize(new Dimension(150, 30)); // Adjust userAvatarButton size
+		userAvatarButton.setPreferredSize(new Dimension(150, 40)); // Adjust userAvatarButton size
 		userAvatarButton.addActionListener(this);
 		userAvatarButton.setFocusable(false);
 
@@ -59,6 +76,7 @@ public class UserPage implements ActionListener {
 		nav.add(app);
 		nav.add(search);
 		nav.add(walletButton);
+		nav.add(shoppingCart);
 		nav.add(userAvatarButton);
 		m.add(nav, BorderLayout.NORTH);
 		m.add(screen, BorderLayout.CENTER);
@@ -88,7 +106,6 @@ public class UserPage implements ActionListener {
 			});
 
 			popupMenu.add(profileItem);
-			popupMenu.add(shoppingCart);
 			popupMenu.add(logoutItem);
 			popupMenu.show(userAvatarButton, 0, userAvatarButton.getHeight());
 		}
