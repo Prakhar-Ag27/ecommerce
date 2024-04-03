@@ -101,6 +101,7 @@ public class LoginPage implements ActionListener {
             messageLabel.setText("Login Successful!");
             // new UserPage(); // Commented for testing purposes
             m.dispose();
+            new UserPage();
 
         }
 
