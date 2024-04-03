@@ -94,7 +94,7 @@ public class UserPage implements ActionListener {
             JPanel rowPanel = new JPanel(); // Panel for each row
             rowPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 57, 25)); // Set layout for row panel
 
-            // Add three ProductCard components to each row
+            // Add six ProductCard components to each row
             for (int j = i; j < i + 6; j++) {
                 if (j < 7) { // Ensure not to add more than 100 ProductCard components
                     rowPanel.add(new ProductCard("name", "description", 23.99));
