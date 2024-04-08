@@ -73,7 +73,7 @@ public class SellerPage implements ActionListener {
 
 		nav.add(app);
 		//nav.add(search);
-		nav.add(manageInventoryButton);
+		//nav.add(manageInventoryButton);
 		nav.add(couponButton);
 		nav.add(userAvatarButton);
 
@@ -88,7 +88,7 @@ public class SellerPage implements ActionListener {
 			// Add six ProductCard components to each row
 			for (int j = i; j < i + 6; j++) {
 				if (j < 7) { // Ensure not to add more than 100 ProductCard components
-					rowPanel.add(new ProductCard("name", "description", 23.99));
+					rowPanel.add(new ProductCardSeller("name", "description", 23.99));
 				}
 			}
 
