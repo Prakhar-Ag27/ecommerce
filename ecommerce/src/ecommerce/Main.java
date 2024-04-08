@@ -6,8 +6,12 @@ public class Main {
 		// TODO Auto-generated method stub
 		LoginPage l = new LoginPage();
 //		new CheckoutPage();
+
 		// new wallet();
 
+//		new wallet();
+//		new Cart().setVisible(true);
+		
 	}
 
 }
