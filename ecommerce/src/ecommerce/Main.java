@@ -9,6 +9,7 @@ public class Main {
 //		new CheckoutPage();
 //		new wallet();
 		new Cart().setVisible(true);
+//		new User();
 		
 	}
 
