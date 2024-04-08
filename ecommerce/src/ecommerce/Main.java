@@ -14,7 +14,7 @@ public class Main {
 		new SellerPage();
 
 	//	new Cart().setVisible(true);
-//		new User();
+		new User();
 
 	}
 
