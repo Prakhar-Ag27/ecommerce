@@ -12,6 +12,10 @@ public class Main {
 //		new wallet();
 //		new Cart().setVisible(true);
 		//new SellerPage();
+
+	//	new Cart().setVisible(true);
+//		new User();
+
 	}
 
 }
