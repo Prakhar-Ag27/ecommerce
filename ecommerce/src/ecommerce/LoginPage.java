@@ -32,6 +32,7 @@ public class LoginPage implements ActionListener {
     boolean registering = false;
 
     LoginPage() {
+    	new GlobalVariables();
         m.setLayout(null);
 
         userIDLabel.setBounds(50, 100, 75, 25);
