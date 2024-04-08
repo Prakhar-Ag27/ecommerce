@@ -140,8 +140,19 @@ public class UserPage implements ActionListener {
 			JPopupMenu popupMenu = new JPopupMenu();
 			popupMenu.setPreferredSize(new Dimension(150, 100));
 			JMenuItem profileItem = new JMenuItem("View Profile");
-			JMenuItem shoppingCart = new JMenuItem("Shopping Cart");
 			JMenuItem logoutItem = new JMenuItem("Logout");
+			
+			profileItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// Perform logout action here
+					
+					new User();
+					// Close the dropdown menu
+					popupMenu.setVisible(false);
+				}
+			});
+			
 			logoutItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
