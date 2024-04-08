@@ -17,7 +17,7 @@ public class Cart extends JFrame {
     public Cart() {
         setTitle("Shopping Cart");
         setSize(800, 300); // Adjusted size for the new columns
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Initialize components
         String[] columnNames = {"Product Name", "Quantity", "Price", "Expected Delivery Date", "+", "-", "Remove"};
@@ -68,6 +68,7 @@ public class Cart extends JFrame {
 
                 // Display total payable amount
                 JOptionPane.showMessageDialog(null, "Total Payable Amount: $" + totalAmount);
+                new CheckoutPage();
             }
         });
 
@@ -99,6 +100,8 @@ public class Cart extends JFrame {
 
         productTable.getColumn("Remove").setCellRenderer(new ButtonRenderer("Remove", Color.BLUE));
         productTable.getColumn("Remove").setCellEditor(new ButtonEditor(new JCheckBox(), "Remove"));
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     private double calculateTotal() {

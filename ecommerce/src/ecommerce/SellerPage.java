@@ -4,72 +4,45 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class UserPage implements ActionListener {
+public class SellerPage implements ActionListener {
 	maxFrame m = new maxFrame("User HomePage - ECommerce App");
 	JLabel l = new JLabel("Welcome to User Page!");
 	JButton searchButton;
 	JButton userAvatarButton;
 	JPanel screen;
 
-	UserPage() {
+	SellerPage() {
 		JPanel nav = new JPanel(); // Panel for nav
 		nav.setBackground(Color.WHITE);
 		nav.setPreferredSize(new Dimension(100, 100));
 		nav.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10)); // Add spacing between components
 
-		JPanel search = new JPanel();
-		search.setBackground(Color.WHITE);
-		searchButton = new JButton("Search");
-		JTextField searchBox = new JTextField();
-		searchBox.setPreferredSize(new Dimension(300, 40)); // Adjust search box size
-		searchButton.setPreferredSize(new Dimension(100, 40)); // Adjust search button size
-		searchButton.setFocusable(false);
-		searchButton.addActionListener(this);
-		search.add(searchBox);
-		search.add(searchButton);
-
-		ImageIcon walletIcon = new ImageIcon("src/img/wallet.png");
-		JButton walletButton = new JButton();
-		walletButton.setText("Wallet");
-		Image scaledImage = walletIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		ImageIcon scaledIcon = new ImageIcon(scaledImage);
-		walletButton.setIcon(scaledIcon);
-		walletButton.setHorizontalTextPosition(JButton.RIGHT);
-		walletButton.setVerticalTextPosition(JButton.CENTER);
-		walletButton.setFocusable(false);
-		walletButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new wallet();
-			}
-		});
-
-		ImageIcon shoppingCartImg = new ImageIcon("src/img/shoppingCart.png");
-		JButton shoppingCart = new JButton();
-		shoppingCart.setText("Shopping Cart");
-		Image scaledCartImage = shoppingCartImg.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		ImageIcon scaledCartIcon = new ImageIcon(scaledCartImage);
-		shoppingCart.setIcon(scaledCartIcon);
-		shoppingCart.setHorizontalTextPosition(JButton.RIGHT);
-		shoppingCart.setVerticalTextPosition(JButton.CENTER);
-		shoppingCart.setFocusable(false);
-		shoppingCart.addActionListener(new ActionListener() {
+		ImageIcon couponImg = new ImageIcon("src/img/coupon.png");
+		JButton couponButton = new JButton();
+		couponButton.setText("Manage Coupons");
+		Image scaledCouponImg = couponImg.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon scaledCartIcon = new ImageIcon(scaledCouponImg);
+		couponButton.setIcon(scaledCartIcon);
+		couponButton.setHorizontalTextPosition(JButton.RIGHT);
+		couponButton.setVerticalTextPosition(JButton.CENTER);
+		couponButton.setFocusable(false);
+		couponButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Cart();
 			}
 		});
 		
-		ImageIcon advSearchImgIcon = new ImageIcon("src/img/search.png");
-		JButton advSearchButton = new JButton();
-		advSearchButton.setText("Advanced Search");
-		Image advSearchImg = advSearchImgIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		advSearchImgIcon = new ImageIcon(advSearchImg);
-		advSearchButton.setIcon(advSearchImgIcon);
-		advSearchButton.setHorizontalTextPosition(JButton.RIGHT);
-		advSearchButton.setVerticalTextPosition(JButton.CENTER);
-		advSearchButton.setFocusable(false);
-		advSearchButton.addActionListener(new ActionListener() {
+		ImageIcon manageInventoryImgIcon = new ImageIcon("src/img/manage.png");
+		JButton manageInventoryButton = new JButton();
+		manageInventoryButton.setText("Manage Inventory");
+		Image manageInventoryImg = manageInventoryImgIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		manageInventoryImgIcon = new ImageIcon(manageInventoryImg);
+		manageInventoryButton.setIcon(manageInventoryImgIcon);
+		manageInventoryButton.setHorizontalTextPosition(JButton.RIGHT);
+		manageInventoryButton.setVerticalTextPosition(JButton.CENTER);
+		manageInventoryButton.setFocusable(false);
+		manageInventoryButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new AdvancedSearch();
@@ -99,10 +72,9 @@ public class UserPage implements ActionListener {
 		// Set preferred size of JScrollPane
 
 		nav.add(app);
-		nav.add(search);
-		nav.add(advSearchButton);
-		nav.add(walletButton);
-		nav.add(shoppingCart);
+		//nav.add(search);
+		nav.add(manageInventoryButton);
+		nav.add(couponButton);
 		nav.add(userAvatarButton);
 
 		m.add(nav, BorderLayout.NORTH);
