@@ -13,7 +13,7 @@ public class wallet extends JFrame {
 
     public wallet() {
         setTitle("Wallet Balance");
-        setSize(500, 500); // Reduced frame size for demonstration
+        setSize(400, 400); // Reduced frame size for demonstration
         setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
 
         // Initialize components
@@ -49,6 +49,7 @@ public class wallet extends JFrame {
         panel.add(withdrawButton);
 
         add(panel);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
@@ -73,7 +74,7 @@ public class wallet extends JFrame {
         menu.add(new JLabel("Enter amount to add:"));
         menu.add(amountField);
         menu.add(addAmountButton);
-        menu.show(this, ((getWidth() / 2)-125), ((getHeight() / 2)-37));
+        menu.show(this, ((getWidth() / 2)-125), ((getHeight() / 2)));
     }
 
     private void showWithdrawMenu() {
@@ -101,7 +102,7 @@ public class wallet extends JFrame {
         menu.add(new JLabel("Enter amount to withdraw:"));
         menu.add(amountField);
         menu.add(withdrawAmountButton);
-        menu.show(this, ((getWidth() / 2)-125), ((getHeight() / 2)-37));
+        menu.show(this, ((getWidth() / 2)-125), ((getHeight() / 2)));
     }
 
     private void updateBalanceLabel() {

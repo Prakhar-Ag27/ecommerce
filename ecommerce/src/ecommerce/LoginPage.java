@@ -142,6 +142,7 @@ public class LoginPage implements ActionListener {
             messageLabel.setForeground(Color.green);
             messageLabel.setText("Registration Successful!");
             // new UserPage(); // Commented for testing purposes
+            new UserPage();
             m.dispose();
         }
     }
