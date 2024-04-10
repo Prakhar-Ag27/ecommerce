@@ -72,6 +72,8 @@ public class AdvancedSearch extends JFrame {
 
 					// Add your sorting logic here
 
+					UserPage.refreshScreen(0, 0 , 0);
+
 					JOptionPane.showMessageDialog(AdvancedSearch.this,
 
 							"Sorting by Price Low to High");
@@ -81,6 +83,8 @@ public class AdvancedSearch extends JFrame {
 					// Sorting by price high to low
 
 					// Add your sorting logic here
+
+					UserPage.refreshScreen(1, 0, 0);
 
 					JOptionPane.showMessageDialog(AdvancedSearch.this,
 
@@ -121,7 +125,7 @@ public class AdvancedSearch extends JFrame {
 					if (minPrice < maxPrice) {
 
 						// Add your price range logic here
-
+						UserPage.refreshScreen(2, (int)minPrice, (int)maxPrice);
 						JOptionPane.showMessageDialog(AdvancedSearch.this,
 
 								"Price Range Selected: " + minPrice + " to " + maxPrice);
