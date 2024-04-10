@@ -15,6 +15,8 @@ public class GlobalVariables {
 
      public static Connection connection;
      public static Statement statement;
+     public static int userID;
+     public static int sellerID;
      
    public GlobalVariables() {
 	   try {
@@ -23,6 +25,7 @@ public class GlobalVariables {
 
            // Establish connection to the database
            connection = DriverManager.getConnection(url, username, password);
+           statement = connection.createStatement();
            System.out.println("Connected Succesfully");
        } catch (ClassNotFoundException | SQLException e) {
            e.printStackTrace();
