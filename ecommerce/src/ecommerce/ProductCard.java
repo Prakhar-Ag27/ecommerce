@@ -40,7 +40,7 @@ public class ProductCard extends JPanel {
 				try {
 					//INSERT INTO table_name (column1, column2, column3, ...)
 					//VALUES (value1, value2, value3, ...);
-					GlobalVariables.statement.executeUpdate(String.format("Insert into cart (customer_id, item_id, quantity) values (%d,%d,1)",GlobalVariables.userID, id));
+					GlobalVariables.statement.executeUpdate(String.format("CALL AddToCart(%d,%d,1, @isValid, @addedSuccessfully);",GlobalVariables.userID, id));
 					JOptionPane.showMessageDialog(null, "Product added to cart: " + name);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
