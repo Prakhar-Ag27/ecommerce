@@ -11,15 +11,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Cart extends JFrame {
-	private JTable productTable;
+	public static Cart selfReference;
+	public static JTable productTable;
 	static DefaultTableModel productModel;
 	private JButton checkoutButton;
 	private JLabel totalLabel;
 	private JButton applyCouponButton; // New button for applying coupon code
-	public static ArrayList<String[]> arr = new ArrayList();
 	public String[] toBeInserted = new String[4];
+	public static Boolean check = true;
 
 	public Cart() {
+		this.selfReference = this;
 		setTitle("Shopping Cart");
 		setSize(800, 300); // Adjusted size for the new columns
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -29,7 +31,7 @@ public class Cart extends JFrame {
 				GlobalVariables.userID);
 		ResultSet resultSet;
 		// Initialize components
-		String[] columnNames = { "Product Name", "Quantity", "Price", "+", "-", "Remove" };
+		String[] columnNames = { "PId", "Product Name", "Quantity", "Price", "+", "-", "Remove" };
 		productModel = new DefaultTableModel(columnNames, 0);
 		try {
 			resultSet = GlobalVariables.statement.executeQuery(cartQuery);
@@ -39,12 +41,7 @@ public class Cart extends JFrame {
 				String quantity = resultSet.getString("quantity");
 				String price = resultSet.getString("price");
 
-				toBeInserted[0] = id;
-				toBeInserted[1] = name;
-				toBeInserted[2] = quantity;
-				toBeInserted[3] = price;
-				productModel.addRow(new String[] { name, quantity, price });
-				arr.add(toBeInserted);
+				productModel.addRow(new String[] { id, name, quantity, price });
 			}
 		} catch (SQLException e1) {
 			System.err.println("Failed to connect to the database or execute stored procedure!");
@@ -54,12 +51,12 @@ public class Cart extends JFrame {
 		productTable = new JTable(productModel) {
 			@Override
 			public Class getColumnClass(int column) {
-				return column == 3 || column == 4 || column == 5 ? JButton.class : Object.class;
+				return column == 4 || column == 5 || column == 6 ? JButton.class : Object.class;
 			}
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return column == 3 || column == 4 || column == 5;
+				return column == 4 || column == 5 || column == 6;
 			}
 		};
 		productTable.setRowHeight(30);
@@ -185,18 +182,20 @@ class ButtonEditor extends DefaultCellEditor {
 	}
 
 	public Object getCellEditorValue() {
+		
+		Cart.check = false;
 		if (isPushed) {
 			// Button clicked, implement your action here
 			if (label.equals("Add")) {
 				// System.out.println("Add button clicked in row: " + clickedRow);
 				String addQuery = String.format("CALL AddToCart(%s,%s,%s, @isValid, @addedSuccessfully);",
-						GlobalVariables.userID, Cart.arr.get(clickedRow)[0], "1");
+						GlobalVariables.userID, Cart.productModel.getValueAt(clickedRow, 0), "1");
 				try {
 					GlobalVariables.statement.executeQuery(addQuery);
 
 					Cart.productModel.setValueAt(
-							"" + (Integer.parseInt((String) Cart.productModel.getValueAt(clickedRow, 1)) + 1),
-							clickedRow, 1);
+							"" + (Integer.parseInt((String) Cart.productModel.getValueAt(clickedRow, 2)) + 1),
+							clickedRow, 2);
 					Cart.productModel.fireTableDataChanged();
 
 				} catch (SQLException e) {
@@ -206,13 +205,13 @@ class ButtonEditor extends DefaultCellEditor {
 			} else if (label.equals("Subtract")) {
 				// System.out.println("Subtract button clicked in row: " + clickedRow);
 				String subQuery = String.format("CALL AddToCart(%s,%s,%d, @isValid, @addedSuccessfully);",
-						GlobalVariables.userID, Cart.arr.get(clickedRow)[0], -1);
+						GlobalVariables.userID, Cart.productModel.getValueAt(clickedRow, 0), -1);
 				try {
 					GlobalVariables.statement.executeQuery(subQuery);
 
 					Cart.productModel.setValueAt(
-							"" + (Integer.parseInt((String) Cart.productModel.getValueAt(clickedRow, 1)) - 1),
-							clickedRow, 1);
+							"" + (Integer.parseInt((String) Cart.productModel.getValueAt(clickedRow, 2)) - 1),
+							clickedRow, 2);
 					Cart.productModel.fireTableDataChanged();
 
 				} catch (SQLException e) {
@@ -220,11 +219,12 @@ class ButtonEditor extends DefaultCellEditor {
 					e.printStackTrace();
 				}
 			} else {
-				String remQuery = String.format("DELETE FROM cart WHERE item_id = '%s';", Cart.arr.get(clickedRow)[0]);
+				System.out.println("pid"+" " +Cart.productModel.getValueAt(clickedRow, 0));
+				String remQuery = String.format("DELETE FROM cart WHERE item_id = '%s' and customer_id = %d;", Cart.productModel.getValueAt(clickedRow, 0), GlobalVariables.userID);
 				try {
 					GlobalVariables.statement.executeUpdate(remQuery);
-
-					Cart.productModel.removeRow(clickedRow);
+					Cart.selfReference.dispose();
+					new Cart();
 
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -234,7 +234,7 @@ class ButtonEditor extends DefaultCellEditor {
 		}
 		isPushed = false;
 		return label;
-	}
+}
 
 	public boolean stopCellEditing() {
 		isPushed = false;

@@ -101,7 +101,7 @@ public class LoginPage implements ActionListener {
 			String userID = userIDField.getText();
 			String password = String.valueOf(userPasswordField.getPassword());
 
-			String loginQuery = String.format("CALL login('%s', '%s', @isSeller, @userID);", "user1@example.com", "password1");
+			String loginQuery = String.format("CALL login('%s', '%s', @isSeller, @userID);", "user3@example.com", "password3");
 			String loginQuery2 = String.format("select @isSeller,@userID;");
 			ResultSet resultSet;
 			try {
