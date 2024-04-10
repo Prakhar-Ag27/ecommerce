@@ -3,6 +3,8 @@ package ecommerce;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.*;
 
@@ -12,6 +14,15 @@ public class wallet extends JFrame {
     private JLabel balanceLabel;
 
     public wallet() {
+    	try {
+			ResultSet resultSet = GlobalVariables.statement.executeQuery(String.format("Select wallet_amount from user where id = %d", GlobalVariables.userID));
+			if(resultSet.next()) {
+				balance = resultSet.getInt("wallet_amount");
+			}
+    	} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         setTitle("Wallet Balance");
         setSize(400, 400); // Reduced frame size for demonstration
         setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
@@ -66,6 +77,13 @@ public class wallet extends JFrame {
                     balance += amount;
                     updateBalanceLabel();
                     menu.setVisible(false);
+                    try {
+                    	System.out.println(balance);
+						GlobalVariables.statement.executeUpdate(String.format("Update user set wallet_amount = %.2f where id = %d", balance, GlobalVariables.userID));
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.");
                 }
@@ -90,7 +108,15 @@ public class wallet extends JFrame {
                     if (amount <= balance) {
                         balance -= amount;
                         updateBalanceLabel();
+                        
                         menu.setVisible(false);
+                        try {
+                        	System.out.println(balance);
+    						GlobalVariables.statement.executeUpdate(String.format("Update user set wallet_amount = %.2f where id = %d", balance, GlobalVariables.userID));
+    					} catch (SQLException e1) {
+    						// TODO Auto-generated catch block
+    						e1.printStackTrace();
+    					}
                     } else {
                         JOptionPane.showMessageDialog(null, "Insufficient balance.");
                     }

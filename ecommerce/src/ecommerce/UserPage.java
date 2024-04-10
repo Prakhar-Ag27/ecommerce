@@ -1,8 +1,11 @@
 package ecommerce;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserPage implements ActionListener {
 	maxFrame m = new maxFrame("User HomePage - ECommerce App");
@@ -59,7 +62,7 @@ public class UserPage implements ActionListener {
 				new Cart();
 			}
 		});
-		
+
 		ImageIcon advSearchImgIcon = new ImageIcon("src/img/search.png");
 		JButton advSearchButton = new JButton();
 		advSearchButton.setText("Advanced Search");
@@ -107,21 +110,33 @@ public class UserPage implements ActionListener {
 
 		m.add(nav, BorderLayout.NORTH);
 		m.add(scrollPane, BorderLayout.CENTER);
+		ResultSet resultSet1;
+		ResultSet resultSet2;
+		int count;
+		try {
+			resultSet1 = GlobalVariables.statement.executeQuery("Select count(*) from item;");
+			resultSet1.next();
+			count = resultSet1.getInt(1);
+			resultSet2 = GlobalVariables.statement.executeQuery("Select * from item;");
+			System.out.println(resultSet2.getFetchSize());
+			System.out.println(count);
+			// Create a panel for each row
+			for (int i = 0; i < count; i += 6) {
+				JPanel rowPanel = new JPanel(); // Panel for each row
+				rowPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 57, 25)); // Set layout for row panel
 
-		// Create a panel for each row
-		for (int i = 0; i < 100; i += 6) {
-			JPanel rowPanel = new JPanel(); // Panel for each row
-			rowPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 57, 25)); // Set layout for row panel
+				// Add six ProductCard components to each row
+				for (int j = i; j < i + 6 && resultSet2.next(); j++) {
+		            rowPanel.add(new ProductCard(resultSet2.getString("name"), resultSet2.getString("description"),
+		                    resultSet2.getDouble("price"), resultSet2.getInt("id")));
+		        }
 
-			// Add six ProductCard components to each row
-			for (int j = i; j < i + 6; j++) {
-				if (j < 7) { // Ensure not to add more than 100 ProductCard components
-					rowPanel.add(new ProductCard("name", "description", 23.99));
-				}
+				// Add row panel to the screen panel
+				screen.add(rowPanel);
 			}
-
-			// Add row panel to the screen panel
-			screen.add(rowPanel);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 
 		m.setVisible(true);
@@ -141,18 +156,18 @@ public class UserPage implements ActionListener {
 			popupMenu.setPreferredSize(new Dimension(150, 100));
 			JMenuItem profileItem = new JMenuItem("View Profile");
 			JMenuItem logoutItem = new JMenuItem("Logout");
-			
+
 			profileItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Perform logout action here
-					
+
 					new User();
 					// Close the dropdown menu
 					popupMenu.setVisible(false);
 				}
 			});
-			
+
 			logoutItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
