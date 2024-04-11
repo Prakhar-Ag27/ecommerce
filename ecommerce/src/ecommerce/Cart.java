@@ -129,7 +129,7 @@ public class Cart extends JFrame {
 	private double calculateTotal() {
 		double total=0.0;
 		String cartQuery = String.format(
-				"SELECT SUM(quantity) as summ FROM cart where customer_id = %d;",GlobalVariables.userID);
+				"SELECT SUM(cart.quantity * (item.price - item.price * item.discount / 100)) AS summ FROM cart JOIN item ON cart.item_id = item.id WHERE cart.customer_id = %d;",GlobalVariables.userID);
 		ResultSet resultSet;
 		try {
 			resultSet = GlobalVariables.statement.executeQuery(cartQuery);
