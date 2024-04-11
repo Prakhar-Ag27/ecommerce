@@ -15,7 +15,7 @@ public class Cart extends JFrame {
 	public static JTable productTable;
 	static DefaultTableModel productModel;
 	private JButton checkoutButton;
-	private JLabel totalLabel;
+	public static JLabel totalLabel;
 	private JButton applyCouponButton; // New button for applying coupon code
 	public String[] toBeInserted = new String[4];
 	public static Boolean check = true;
@@ -126,15 +126,17 @@ public class Cart extends JFrame {
 		setVisible(true);
 	}
 
-	private double calculateTotal() {
-		double total=0.0;
+	static double calculateTotal() {
+		double total = 0.0;
 		String cartQuery = String.format(
-				"SELECT SUM(cart.quantity * (item.price - item.price * item.discount / 100)) AS summ FROM cart JOIN item ON cart.item_id = item.id WHERE cart.customer_id = %d;",GlobalVariables.userID);
+				"SELECT SUM(cart.quantity * (item.price - item.price * item.discount / 100)) AS summ FROM cart JOIN item ON cart.item_id = item.id WHERE cart.customer_id = %d;",
+				GlobalVariables.userID);
 		ResultSet resultSet;
 		try {
 			resultSet = GlobalVariables.statement.executeQuery(cartQuery);
-				if(resultSet.next())total = resultSet.getDouble("summ");
-			
+			if (resultSet.next())
+				total = resultSet.getDouble("summ");
+
 		} catch (SQLException e1) {
 			System.err.println("Failed to connect to the database or execute stored procedure!");
 			e1.printStackTrace();
@@ -190,38 +192,46 @@ class ButtonEditor extends DefaultCellEditor {
 		
 		Cart.check = false;
 		if (isPushed) {
+			
 			// Button clicked, implement your action here
 			if (label.equals("Add")) {
 				// System.out.println("Add button clicked in row: " + clickedRow);
-				String addQuery = String.format("CALL AddToCart(%s,%s,%s, @isValid, @addedSuccessfully);",
-						GlobalVariables.userID, Cart.productModel.getValueAt(clickedRow, 0), "1");
+				String addQuery = String.format("CALL  increaseInCart(%s,%s, @isCustomer, @addedSuccessfully);",
+						GlobalVariables.userID, Cart.productModel.getValueAt(clickedRow, 0));
 				try {
-					GlobalVariables.statement.executeQuery(addQuery);
-
-					Cart.productModel.setValueAt(
-							"" + (Integer.parseInt((String) Cart.productModel.getValueAt(clickedRow, 2)) + 1),
-							clickedRow, 2);
-					Cart.productModel.fireTableDataChanged();
+					ResultSet r = GlobalVariables.statement.executeQuery(String.format("SELECT quantity FROM item WHERE id = %s;", Cart.productModel.getValueAt(clickedRow, 0)));
+					if(r.next()&& r.getInt("quantity")!= (Integer.parseInt((String) Cart.productModel.getValueAt(clickedRow, 2)))) {
+						GlobalVariables.statement.executeQuery(addQuery);
+						
+						Cart.productModel.setValueAt(
+								"" + (Integer.parseInt((String) Cart.productModel.getValueAt(clickedRow, 2)) + 1),
+								clickedRow, 2);
+						Cart.productModel.fireTableDataChanged();
+					}
 
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else if (label.equals("Subtract")) {
+				
 				// System.out.println("Subtract button clicked in row: " + clickedRow);
-				String subQuery = String.format("CALL AddToCart(%s,%s,%d, @isValid, @addedSuccessfully);",
+				String subQuery = String.format("CALL  decreaseInCart(%s,%s, @isCustomer, @removedSuccessfully);",
 						GlobalVariables.userID, Cart.productModel.getValueAt(clickedRow, 0), -1);
 				try {
 					GlobalVariables.statement.executeQuery(subQuery);
-
+					if(Integer.parseInt((String) Cart.productModel.getValueAt(clickedRow, 2))!=1) {
 					Cart.productModel.setValueAt(
 							"" + (Integer.parseInt((String) Cart.productModel.getValueAt(clickedRow, 2)) - 1),
 							clickedRow, 2);
 					Cart.productModel.fireTableDataChanged();
-
+					} else {
+						Cart.selfReference.dispose();
+						new Cart();
+					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("0 left");
 				}
 			} else {
 				System.out.println("pid"+" " +Cart.productModel.getValueAt(clickedRow, 0));
@@ -236,6 +246,7 @@ class ButtonEditor extends DefaultCellEditor {
 					e.printStackTrace();
 				}
 			}
+			Cart.totalLabel.setText("Total Payable Amount: "+Cart.calculateTotal());
 		}
 		isPushed = false;
 		return label;
