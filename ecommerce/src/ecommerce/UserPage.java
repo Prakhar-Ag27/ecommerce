@@ -12,7 +12,57 @@ public class UserPage implements ActionListener {
 	JLabel l = new JLabel("Welcome to User Page!");
 	JButton searchButton;
 	JButton userAvatarButton;
-	JPanel screen;
+	static JPanel screen;
+	JTextField searchBox;
+	public static String searchText = "";
+	public static void refreshScreen(int idx, int low, int high ) {
+		screen.removeAll();
+		ResultSet resultSet1;
+		ResultSet resultSet2;
+		String query;
+		String arrIfSearch[] = new String[3];
+		String arrIfNOSearch[] = new String[3];
+		// 0 for lo to hi, 1 for hi to lo, 2 for price range
+		arrIfSearch[0]= String.format("SELECT * FROM item WHERE name LIKE '%%%s%%' order by price asc;", searchText);
+		arrIfSearch[1]= String.format("SELECT * FROM item WHERE name LIKE '%%%s%%' order by price desc;", searchText);
+		arrIfSearch[2]= String.format("SELECT * FROM item WHERE name LIKE '%%%s%%' and price between %d and %d;", searchText, low, high);
+		arrIfNOSearch[0]= "SELECT * FROM item order by price asc;";
+		arrIfNOSearch[1]= "SELECT * FROM item order by price desc;";
+		arrIfNOSearch[2]= String.format("SELECT * FROM item where price between %d and %d;", low, high);
+		if(searchText.equals("")) {
+			query = arrIfNOSearch[idx];
+		} else {
+			query = arrIfSearch[idx];
+		}
+		int count;
+		try {
+			resultSet1 = GlobalVariables.statement.executeQuery("Select count(*) from item;");
+			resultSet1.next();
+			count = resultSet1.getInt(1);
+			resultSet2 = GlobalVariables.statement.executeQuery(query);
+			System.out.println(resultSet2.getFetchSize());
+			System.out.println(count);
+			// Create a panel for each row
+			for (int i = 0; i < count; i += 6) {
+				JPanel rowPanel = new JPanel(); // Panel for each row
+				rowPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 57, 25)); // Set layout for row panel
+
+				// Add six ProductCard components to each row
+				for (int j = i; j < i + 6 && resultSet2.next(); j++) {
+		            rowPanel.add(new ProductCard(resultSet2.getString("name"), resultSet2.getString("description"),
+		                    resultSet2.getDouble("price"), resultSet2.getInt("discount"), resultSet2.getString("category"), resultSet2.getInt("id")));
+		        }
+
+				// Add row panel to the screen panel
+				screen.add(rowPanel);
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		screen.revalidate();
+		screen.repaint();
+	}
 
 	UserPage() {
 		JPanel nav = new JPanel(); // Panel for nav
@@ -23,7 +73,7 @@ public class UserPage implements ActionListener {
 		JPanel search = new JPanel();
 		search.setBackground(Color.WHITE);
 		searchButton = new JButton("Search");
-		JTextField searchBox = new JTextField();
+		searchBox = new JTextField();
 		searchBox.setPreferredSize(new Dimension(300, 40)); // Adjust search box size
 		searchButton.setPreferredSize(new Dimension(100, 40)); // Adjust search button size
 		searchButton.setFocusable(false);
@@ -128,7 +178,7 @@ public class UserPage implements ActionListener {
 				// Add six ProductCard components to each row
 				for (int j = i; j < i + 6 && resultSet2.next(); j++) {
 		            rowPanel.add(new ProductCard(resultSet2.getString("name"), resultSet2.getString("description"),
-		                    resultSet2.getDouble("price"), resultSet2.getInt("id")));
+		                    resultSet2.getDouble("price"), resultSet2.getInt("discount"), resultSet2.getString("category"), resultSet2.getInt("id")));
 		        }
 
 				// Add row panel to the screen panel
@@ -145,11 +195,41 @@ public class UserPage implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == searchButton) {
 			screen.removeAll();
+			searchText = searchBox.getText();
 
 			// JDBC here for adding content according to search query;
+			ResultSet resultSet1;
+			ResultSet resultSet2;
+			int count;
+			try {
+				resultSet1 = GlobalVariables.statement.executeQuery("Select count(*) from item;");
+				resultSet1.next();
+				count = resultSet1.getInt(1);
+				resultSet2 = GlobalVariables.statement.executeQuery(String.format("SELECT * FROM item WHERE name LIKE '%%%s%%'", searchText));
+				System.out.println(resultSet2.getFetchSize());
+				System.out.println(searchButton.getText());
+				// Create a panel for each row
+				for (int i = 0; i < count; i += 6) {
+					System.out.println("test");
+					JPanel rowPanel = new JPanel(); // Panel for each row
+					rowPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 57, 25)); // Set layout for row panel
 
-			screen.revalidate();
-			screen.repaint();
+					// Add six ProductCard components to each row
+					for (int j = i; j < i + 6 && resultSet2.next(); j++) {
+						System.out.println(resultSet2.getString("name"));
+			            rowPanel.add(new ProductCard(resultSet2.getString("name"), resultSet2.getString("description"),
+			                    resultSet2.getDouble("price"), resultSet2.getInt("discount"), resultSet2.getString("category"), resultSet2.getInt("id")));
+			        }
+
+					// Add row panel to the screen panel
+					screen.add(rowPanel);
+					screen.revalidate();
+					screen.repaint();
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		if (e.getSource() == userAvatarButton) {
 			JPopupMenu popupMenu = new JPopupMenu();

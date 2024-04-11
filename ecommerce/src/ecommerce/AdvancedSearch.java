@@ -1,189 +1,163 @@
 package ecommerce;
 
-
-
 import java.awt.*;
 
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
 
-
-
 import javax.swing.*;
-
-
 
 public class AdvancedSearch extends JFrame {
 
-    public AdvancedSearch() {
+	public AdvancedSearch() {
 
-        setTitle("Advanced Search");
+		setTitle("Advanced Search");
 
-        setSize(400, 400); // Reduced frame size for demonstration
+		setSize(400, 400); // Reduced frame size for demonstration
 
-        setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
 
-        setLocationRelativeTo(null);
+		setLocationRelativeTo(null);
 
+		// Create buttons
 
+		JButton sortButton = new JButton("Sort");
 
-        // Create buttons
+		JButton priceRangeButton = new JButton("Price Range");
 
-        JButton sortButton = new JButton("Sort");
+		// Set preferred size for buttons
 
-        JButton priceRangeButton = new JButton("Price Range");
+		sortButton.setPreferredSize(new Dimension(250, 40));
 
+		priceRangeButton.setPreferredSize(new Dimension(250, 40));
 
+		sortButton.setFocusable(false);
 
-        // Set preferred size for buttons
+		priceRangeButton.setFocusable(false);
 
-        sortButton.setPreferredSize(new Dimension(250, 40));
+		// Set button positions using layout manager
 
-        priceRangeButton.setPreferredSize(new Dimension(250, 40));
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 400, 20)); // 2 rows, 1 column
 
-        sortButton.setFocusable(false);
+		buttonPanel.add(sortButton);
 
-        priceRangeButton.setFocusable(false);
+		buttonPanel.add(priceRangeButton);
 
+		// Add button panel to the frame
 
+		add(buttonPanel, BorderLayout.CENTER);
 
-        // Set button positions using layout manager
+		// Add action listener for sort button
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 400,20)); // 2 rows, 1 column
+		sortButton.addActionListener(new ActionListener() {
 
-        buttonPanel.add(sortButton);
+			@Override
 
-        buttonPanel.add(priceRangeButton);
+			public void actionPerformed(ActionEvent e) {
 
+				// Open a menu for sorting options
 
+				String[] options = { "Price Low to High", "Price High to Low" };
 
-        // Add button panel to the frame
+				int selectedOption = JOptionPane.showOptionDialog(AdvancedSearch.this,
 
-        add(buttonPanel, BorderLayout.CENTER);
+						"Select Sorting Order", "Sort Options", JOptionPane.DEFAULT_OPTION,
 
+						JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
+				if (selectedOption == 0) {
 
-        // Add action listener for sort button
+					// Sorting by price low to high
 
-        sortButton.addActionListener(new ActionListener() {
+					// Add your sorting logic here
 
-            @Override
+					UserPage.refreshScreen(0, 0 , 0);
 
-            public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(AdvancedSearch.this,
 
-                // Open a menu for sorting options
+							"Sorting by Price Low to High");
 
-                String[] options = {"Price Low to High", "Price High to Low"};
+				} else if (selectedOption == 1) {
 
-                int selectedOption = JOptionPane.showOptionDialog(AdvancedSearch.this,
+					// Sorting by price high to low
 
-                        "Select Sorting Order", "Sort Options", JOptionPane.DEFAULT_OPTION,
+					// Add your sorting logic here
 
-                        JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+					UserPage.refreshScreen(1, 0, 0);
 
+					JOptionPane.showMessageDialog(AdvancedSearch.this,
 
+							"Sorting by Price High to Low");
 
-                if (selectedOption == 0) {
+				}
 
-                    // Sorting by price low to high
+			}
 
-                    // Add your sorting logic here
+		});
 
-                    JOptionPane.showMessageDialog(AdvancedSearch.this,
+		// Add action listener for price range button
 
-                            "Sorting by Price Low to High");
+		priceRangeButton.addActionListener(new ActionListener() {
 
-                } else if (selectedOption == 1) {
+			@Override
 
-                    // Sorting by price high to low
+			public void actionPerformed(ActionEvent e) {
 
-                    // Add your sorting logic here
+				// Ask for price range input
 
-                    JOptionPane.showMessageDialog(AdvancedSearch.this,
+				String minPriceStr = JOptionPane.showInputDialog(AdvancedSearch.this,
 
-                            "Sorting by Price High to Low");
+						"Enter Minimum Price:");
 
-                }
+				String maxPriceStr = JOptionPane.showInputDialog(AdvancedSearch.this,
 
-            }
+						"Enter Maximum Price:");
 
-        });
+				try {
 
+					double minPrice = Double.parseDouble(minPriceStr);
 
+					double maxPrice = Double.parseDouble(maxPriceStr);
 
-        // Add action listener for price range button
+					// Check if minPrice is smaller than maxPrice
 
-        priceRangeButton.addActionListener(new ActionListener() {
+					if (minPrice < maxPrice) {
 
-            @Override
+						// Add your price range logic here
+						UserPage.refreshScreen(2, (int)minPrice, (int)maxPrice);
+						JOptionPane.showMessageDialog(AdvancedSearch.this,
 
-            public void actionPerformed(ActionEvent e) {
+								"Price Range Selected: " + minPrice + " to " + maxPrice);
 
-                // Ask for price range input
+					} else {
 
-                String minPriceStr = JOptionPane.showInputDialog(AdvancedSearch.this,
+						JOptionPane.showMessageDialog(AdvancedSearch.this,
 
-                        "Enter Minimum Price:");
+								"Minimum Price should be smaller than Maximum Price.",
 
-                String maxPriceStr = JOptionPane.showInputDialog(AdvancedSearch.this,
+								"Error", JOptionPane.ERROR_MESSAGE);
 
-                        "Enter Maximum Price:");
+					}
 
+				} catch (NumberFormatException ex) {
 
+					JOptionPane.showMessageDialog(AdvancedSearch.this,
 
-                try {
+							"Invalid input. Please enter valid numbers for price range.",
 
-                    double minPrice = Double.parseDouble(minPriceStr);
+							"Error", JOptionPane.ERROR_MESSAGE);
 
-                    double maxPrice = Double.parseDouble(maxPriceStr);
+				}
 
+			}
 
+		});
 
-                    // Check if minPrice is smaller than maxPrice
+		// Display the frame
 
-                    if (minPrice < maxPrice) {
+		setVisible(true);
 
-                        // Add your price range logic here
-
-                        JOptionPane.showMessageDialog(AdvancedSearch.this,
-
-                                "Price Range Selected: " + minPrice + " to " + maxPrice);
-
-                    } else {
-
-                        JOptionPane.showMessageDialog(AdvancedSearch.this,
-
-                                "Minimum Price should be smaller than Maximum Price.",
-
-                                "Error", JOptionPane.ERROR_MESSAGE);
-
-                    }
-
-                } catch (NumberFormatException ex) {
-
-                    JOptionPane.showMessageDialog(AdvancedSearch.this,
-
-                            "Invalid input. Please enter valid numbers for price range.",
-
-                            "Error", JOptionPane.ERROR_MESSAGE);
-
-                }
-
-            }
-
-        });
-
-
-
-        // Display the frame
-
-        setVisible(true);
-
-    }
-
-
-
-    
+	}
 
 }
