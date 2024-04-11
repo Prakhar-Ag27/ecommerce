@@ -63,7 +63,7 @@ public class Cart extends JFrame {
 		JScrollPane productTableScrollPane = new JScrollPane(productTable);
 
 		checkoutButton = new JButton("Checkout");
-		totalLabel = new JLabel("Total Payable Amount: $0");
+		totalLabel = new JLabel(String.format("Total Payable Amount: $ %4.3f", calculateTotal()));
 
 		// New button for applying coupon code
 		applyCouponButton = new JButton("Apply Coupon Code");
@@ -90,7 +90,8 @@ public class Cart extends JFrame {
 
 				// Display total payable amount
 				JOptionPane.showMessageDialog(null, "Total Payable Amount: $" + totalAmount);
-				new CheckoutPage();
+				new CheckoutPage(calculateTotal());
+				dispose();
 			}
 		});
 
@@ -126,13 +127,17 @@ public class Cart extends JFrame {
 	}
 
 	private double calculateTotal() {
-		double total = 0.0;
-		for (int row = 0; row < productModel.getRowCount(); row++) {
-			String priceString = (String) productModel.getValueAt(row, 2);
-			double price = Double.parseDouble(priceString.substring(1)); // Remove the '$' sign
-			String quantityString = (String) productModel.getValueAt(row, 1);
-			int quantity = Integer.parseInt(quantityString.split(" ")[0]);
-			total += price * quantity;
+		double total=0.0;
+		String cartQuery = String.format(
+				"SELECT SUM(quantity) as summ FROM cart where customer_id = %d;",GlobalVariables.userID);
+		ResultSet resultSet;
+		try {
+			resultSet = GlobalVariables.statement.executeQuery(cartQuery);
+				if(resultSet.next())total = resultSet.getDouble("summ");
+			
+		} catch (SQLException e1) {
+			System.err.println("Failed to connect to the database or execute stored procedure!");
+			e1.printStackTrace();
 		}
 		return total;
 	}
