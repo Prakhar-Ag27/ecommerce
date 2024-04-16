@@ -16,7 +16,6 @@ public class GlobalVariables {
      public static Connection connection;
      public static Statement statement;
      public static int userID;
-     public static int sellerID;
      
    public GlobalVariables() {
 	   try {

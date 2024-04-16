@@ -15,7 +15,8 @@ public class UserPage implements ActionListener {
 	static JPanel screen;
 	JTextField searchBox;
 	public static String searchText = "";
-	public static void refreshScreen(int idx, int low, int high ) {
+
+	public static void refreshScreen(int idx, int low, int high) {
 		screen.removeAll();
 		ResultSet resultSet1;
 		ResultSet resultSet2;
@@ -23,13 +24,14 @@ public class UserPage implements ActionListener {
 		String arrIfSearch[] = new String[3];
 		String arrIfNOSearch[] = new String[3];
 		// 0 for lo to hi, 1 for hi to lo, 2 for price range
-		arrIfSearch[0]= String.format("SELECT * FROM item WHERE name LIKE '%%%s%%' order by price asc;", searchText);
-		arrIfSearch[1]= String.format("SELECT * FROM item WHERE name LIKE '%%%s%%' order by price desc;", searchText);
-		arrIfSearch[2]= String.format("SELECT * FROM item WHERE name LIKE '%%%s%%' and price between %d and %d;", searchText, low, high);
-		arrIfNOSearch[0]= "SELECT * FROM item order by price asc;";
-		arrIfNOSearch[1]= "SELECT * FROM item order by price desc;";
-		arrIfNOSearch[2]= String.format("SELECT * FROM item where price between %d and %d;", low, high);
-		if(searchText.equals("")) {
+		arrIfSearch[0] = String.format("SELECT * FROM item WHERE name LIKE '%%%s%%' order by price asc;", searchText);
+		arrIfSearch[1] = String.format("SELECT * FROM item WHERE name LIKE '%%%s%%' order by price desc;", searchText);
+		arrIfSearch[2] = String.format("SELECT * FROM item WHERE name LIKE '%%%s%%' and price between %d and %d;",
+				searchText, low, high);
+		arrIfNOSearch[0] = "SELECT * FROM item order by price asc;";
+		arrIfNOSearch[1] = "SELECT * FROM item order by price desc;";
+		arrIfNOSearch[2] = String.format("SELECT * FROM item where price between %d and %d;", low, high);
+		if (searchText.equals("")) {
 			query = arrIfNOSearch[idx];
 		} else {
 			query = arrIfSearch[idx];
@@ -49,9 +51,10 @@ public class UserPage implements ActionListener {
 
 				// Add six ProductCard components to each row
 				for (int j = i; j < i + 6 && resultSet2.next(); j++) {
-		            rowPanel.add(new ProductCard(resultSet2.getString("name"), resultSet2.getString("description"),
-		                    resultSet2.getDouble("price"), resultSet2.getInt("discount"), resultSet2.getString("category"), resultSet2.getInt("id")));
-		        }
+					rowPanel.add(new ProductCard(resultSet2.getString("name"), resultSet2.getString("description"),
+							resultSet2.getDouble("price"), resultSet2.getInt("discount"),
+							resultSet2.getString("category"), resultSet2.getInt("id")));
+				}
 
 				// Add row panel to the screen panel
 				screen.add(rowPanel);
@@ -134,8 +137,19 @@ public class UserPage implements ActionListener {
 		ImageIcon scaledAppIcon = new ImageIcon(scaledAppImage);
 		JLabel app = new JLabel();
 		app.setIcon(scaledAppIcon);
+		ResultSet r;
+		String s = "Welcome";
 
-		userAvatarButton = new JButton("Username");
+		try {
+			r = GlobalVariables.statement
+					.executeQuery(String.format("Select first_name from user where id = %d ", GlobalVariables.userID));
+			r.next();
+			s = r.getString("first_name");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		userAvatarButton = new JButton(String.format("Welcome %s", s));
 		userAvatarButton.setPreferredSize(new Dimension(150, 40)); // Adjust userAvatarButton size
 		userAvatarButton.addActionListener(this);
 		userAvatarButton.setFocusable(false);
@@ -177,9 +191,10 @@ public class UserPage implements ActionListener {
 
 				// Add six ProductCard components to each row
 				for (int j = i; j < i + 6 && resultSet2.next(); j++) {
-		            rowPanel.add(new ProductCard(resultSet2.getString("name"), resultSet2.getString("description"),
-		                    resultSet2.getDouble("price"), resultSet2.getInt("discount"), resultSet2.getString("category"), resultSet2.getInt("id")));
-		        }
+					rowPanel.add(new ProductCard(resultSet2.getString("name"), resultSet2.getString("description"),
+							resultSet2.getDouble("price"), resultSet2.getInt("discount"),
+							resultSet2.getString("category"), resultSet2.getInt("id")));
+				}
 
 				// Add row panel to the screen panel
 				screen.add(rowPanel);
@@ -205,7 +220,8 @@ public class UserPage implements ActionListener {
 				resultSet1 = GlobalVariables.statement.executeQuery("Select count(*) from item;");
 				resultSet1.next();
 				count = resultSet1.getInt(1);
-				resultSet2 = GlobalVariables.statement.executeQuery(String.format("SELECT * FROM item WHERE name LIKE '%%%s%%'", searchText));
+				resultSet2 = GlobalVariables.statement
+						.executeQuery(String.format("SELECT * FROM item WHERE name LIKE '%%%s%%'", searchText));
 				System.out.println(resultSet2.getFetchSize());
 				System.out.println(searchButton.getText());
 				// Create a panel for each row
@@ -217,9 +233,10 @@ public class UserPage implements ActionListener {
 					// Add six ProductCard components to each row
 					for (int j = i; j < i + 6 && resultSet2.next(); j++) {
 						System.out.println(resultSet2.getString("name"));
-			            rowPanel.add(new ProductCard(resultSet2.getString("name"), resultSet2.getString("description"),
-			                    resultSet2.getDouble("price"), resultSet2.getInt("discount"), resultSet2.getString("category"), resultSet2.getInt("id")));
-			        }
+						rowPanel.add(new ProductCard(resultSet2.getString("name"), resultSet2.getString("description"),
+								resultSet2.getDouble("price"), resultSet2.getInt("discount"),
+								resultSet2.getString("category"), resultSet2.getInt("id")));
+					}
 
 					// Add row panel to the screen panel
 					screen.add(rowPanel);

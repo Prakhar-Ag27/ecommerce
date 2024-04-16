@@ -101,7 +101,7 @@ public class LoginPage implements ActionListener {
 			String userID = userIDField.getText();
 			String password = String.valueOf(userPasswordField.getPassword());
 
-			String loginQuery = String.format("CALL login('%s', '%s', @isSeller, @userID);", "user3@example.com", "password3");
+			String loginQuery = String.format("CALL login('%s', '%s', @isSeller, @userID);", userID, password);
 			String loginQuery2 = String.format("select @isSeller,@userID;");
 			ResultSet resultSet;
 			try {
@@ -113,7 +113,7 @@ public class LoginPage implements ActionListener {
 					messageLabel.setText("Login Successful!");
 					m.dispose();
 					if (resultSet.getInt("@isSeller")!= 0) {
-						GlobalVariables.userID = resultSet.getInt("@sellerID");
+						GlobalVariables.userID = resultSet.getInt("@userID");
 						new SellerPage();
 					} else {
 						new UserPage();
