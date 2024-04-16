@@ -32,7 +32,7 @@ public class SellerPage implements ActionListener {
 				for (int j = i; j < i + 6 && resultSet2.next(); j++) {
 					rowPanel.add(new ProductCardSeller(resultSet2.getString("name"),
 							resultSet2.getString("description"), resultSet2.getDouble("price"),
-							resultSet2.getInt("discount"), resultSet2.getString("category"), resultSet2.getInt("id")));
+							resultSet2.getInt("discount"), resultSet2.getString("category"), resultSet2.getInt("id"), resultSet2.getInt("quantity")));
 				}
 
 				// Add row panel to the screen panel
@@ -137,7 +137,7 @@ public class SellerPage implements ActionListener {
 		// nav.add(search);
 		// nav.add(manageInventoryButton);
 		nav.add(addButton);
-		nav.add(couponButton);
+		//nav.add(couponButton);
 		nav.add(userAvatarButton);
 
 		m.add(nav, BorderLayout.NORTH);
@@ -149,7 +149,7 @@ public class SellerPage implements ActionListener {
 			resultSet1.next();
 			int count = resultSet1.getInt(1);
 			ResultSet resultSet2 = GlobalVariables.statement
-					.executeQuery(String.format("Select * from item where seller_id = %s ", GlobalVariables.userID));
+					.executeQuery(String.format("Select * from item where seller_id = '%d';", GlobalVariables.userID));
 			System.out.println(resultSet2.getFetchSize());
 			System.out.println(count);
 			// Create a panel for each row
@@ -161,7 +161,7 @@ public class SellerPage implements ActionListener {
 				for (int j = i; j < i + 6 && resultSet2.next(); j++) {
 					rowPanel.add(new ProductCardSeller(resultSet2.getString("name"),
 							resultSet2.getString("description"), resultSet2.getDouble("price"),
-							resultSet2.getInt("discount"), resultSet2.getString("category"), resultSet2.getInt("id")));
+							resultSet2.getInt("discount"), resultSet2.getString("category"), resultSet2.getInt("id"), resultSet2.getInt("quantity")));
 				}
 
 				// Add row panel to the screen panel

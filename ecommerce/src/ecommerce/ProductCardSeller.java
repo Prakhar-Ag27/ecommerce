@@ -2,6 +2,7 @@ package ecommerce;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 
 public class ProductCardSeller extends JPanel {
 	private JLabel nameLabel;
@@ -9,9 +10,9 @@ public class ProductCardSeller extends JPanel {
 	private JLabel priceLabel;
 	private JLabel categoryLabel;
 	private JLabel discountLabel;
-	private JButton addToCartButton;
+	private JButton editButton;
 
-    public ProductCardSeller(String name, String description, double price, int discount, String category, int id) {
+    public ProductCardSeller(String name, String description, double price, int discount, String category, int id, int quantity) {
     	
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEtchedBorder()); // Add border for visual separation
@@ -30,16 +31,35 @@ public class ProductCardSeller extends JPanel {
 		infoPanel.add(priceLabel);
 		infoPanel.add(discountLabel);
 
-        addToCartButton = new JButton("Edit details");
-        addToCartButton.addActionListener(new ActionListener() {
+        editButton = new JButton("Edit details");
+        editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Add logic to add product to cart
-                new Product();
+                new Product(name, description, category, quantity, discount, price, id);
+            }
+        });
+        
+        JButton deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Add logic to add product to cart
+                try {
+					GlobalVariables.statement.executeUpdate(String.format("Delete from item where `id` = '%d'", id));
+					SellerPage.refreshScreen();
+                } catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					
+					 JOptionPane.showMessageDialog(getParent(), e1.getMessage(), "ERROR", JOptionPane.WARNING_MESSAGE);
+				}
             }
         });
 
         add(infoPanel, BorderLayout.CENTER);
-        add(addToCartButton, BorderLayout.SOUTH);  
+        JPanel p = new JPanel(new BorderLayout());
+        p.add(editButton, BorderLayout.NORTH);  
+        p.add(deleteButton, BorderLayout.SOUTH);
+        add(p, BorderLayout.SOUTH);
     }
 }
