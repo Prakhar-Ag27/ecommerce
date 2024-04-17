@@ -19,7 +19,8 @@ public class LoginPage implements ActionListener {
 
 	JButton loginButton = new JButton("Login");
 	JButton resetButton = new JButton("Reset");
-	JButton registerButton = new JButton("Register");
+	JButton registerButton = new JButton("Register Customer");
+	JButton registerSellerButton = new JButton("Register Seller");
 	JTextField userIDField = new JTextField();
 	JPasswordField userPasswordField = new JPasswordField();
 	JLabel userIDLabel = new JLabel("User ID: ");
@@ -49,13 +50,16 @@ public class LoginPage implements ActionListener {
 		loginButton.addActionListener(this);
 		resetButton.setBounds(225, 200, 95, 25);
 		resetButton.addActionListener(this);
-		registerButton.setBounds(125, 250, 95, 25);
+		registerButton.setBounds(125, 300, 150, 25);
+		registerSellerButton.setBounds(125, 350, 150, 25);
 		registerButton.addActionListener(this);
+		registerSellerButton.addActionListener(this);
 		resetButton.setFocusable(false);
 		loginButton.setFocusable(false);
 		registerButton.setFocusable(false);
+		registerSellerButton.setFocusable(false);
 
-		registerLabel.setBounds(125, 275, 250, 25);
+		registerLabel.setBounds(125, 250, 250, 25);
 
 		usernameField.setBounds(125, 300, 200, 25);
 		registerUsernameLabel.setBounds(50, 300, 75, 25);
@@ -80,6 +84,7 @@ public class LoginPage implements ActionListener {
 		m.add(loginButton);
 		m.add(resetButton);
 		m.add(registerButton);
+		m.add(registerSellerButton);
 		m.add(registerLabel);
 		m.add(usernameField);
 		m.add(registerUsernameLabel);
@@ -135,32 +140,10 @@ public class LoginPage implements ActionListener {
 		}
 
 		if (e.getSource() == registerButton) {
-			registering = true;
-			messageLabel.setText("");
-			userIDLabel.setText("Username:");
-			userPasswordLabel.setText("Password:");
-			userIDField.setText("");
-			userPasswordField.setText("");
-
-			// Show registration fields and labels
-			usernameField.setVisible(true);
-			registerUsernameLabel.setVisible(true);
-			registerPasswordField.setVisible(true);
-			registerPasswordLabel.setVisible(true);
-			registerConfirmButton.setVisible(true);
-
-			// Hide login fields and labels
-			userIDLabel.setVisible(false);
-			userPasswordLabel.setVisible(false);
-			userIDField.setVisible(false);
-			userPasswordField.setVisible(false);
-			loginButton.setVisible(false);
-			resetButton.setVisible(false);
-			registerButton.setVisible(false);
-			registerLabel.setVisible(false);
-
-			m.revalidate();
-			m.repaint();
+			new Registration();
+		}
+		if (e.getSource() == registerSellerButton) {
+			new RegistrationSeller();
 		}
 
 		if (e.getSource() == registerConfirmButton) {

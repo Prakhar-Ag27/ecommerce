@@ -1,6 +1,7 @@
 package ecommerce;
 
 import java.awt.Color;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 //import javax.swing.JComboBox;
@@ -10,64 +11,74 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 public class CheckoutPage extends JFrame {
-    
+
 	public CheckoutPage(double cartAmount) {
-		
-        String[] paymentOptions = {"Wallet", "Cash on Delivery"};
-        JComboBox<String> paymentDropdown = new JComboBox<>(paymentOptions);
 
-        JTextField addressField = new JTextField(20); // Address input field
+		String[] paymentOptions = { "Wallet", "Cash on Delivery" };
+		JComboBox<String> paymentDropdown = new JComboBox<>(paymentOptions);
 
-        JButton checkoutButton = new JButton("Checkout");
-        checkoutButton.addActionListener(e -> {
-            String selectedOption = (String) paymentDropdown.getSelectedItem();
-            String address = addressField.getText();
+		JTextField addressField = new JTextField(20); // Address input field
 
-            System.out.println("Payment mode: " + selectedOption);
-            System.out.println("Delivery address: " + address);
+		JButton checkoutButton = new JButton("Checkout");
+		checkoutButton.addActionListener(e -> {
+			String selectedOption = (String) paymentDropdown.getSelectedItem();
+			String address = addressField.getText();
 
-            JOptionPane.showMessageDialog(this, "Order Confirmed", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
-            if(selectedOption == "Wallet") {walletCheckout(cartAmount);}
-            try {
-    			GlobalVariables.statement.executeUpdate(
-    					String.format("Delete from cart where customer_id=%d",GlobalVariables.userID)
-    					);
-    			
-    			
-    		} catch (SQLException e1) {
-    			System.err.println("Failed to connect to the database or execute stored procedure!");
-    			e1.printStackTrace();
-    		}
-            dispose();
-            
-        });
+			if (selectedOption == "Wallet") {
+				try {
+					ResultSet r = GlobalVariables.statement.executeQuery(String.format(
+							"CALL checkout(1, %d, '%s', '', '', '', '', @success);", GlobalVariables.userID, address));
+					r = GlobalVariables.statement.executeQuery("Select @success;");
+					if (r.next() && r.getInt("@success") != 0) {
+							JOptionPane.showMessageDialog(null, "ORDER CONFIRMED!", "Order Confirmation",
+									JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							JOptionPane.showMessageDialog(null, "INSUFFICIENT BALANCE!", "Order not confirmed",
+									JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
 
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Select Payment Mode:"));
-        panel.add(paymentDropdown);
-        panel.add(new JLabel("Enter Address:"));
-        panel.add(addressField);
-        panel.add(checkoutButton);
+				 catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			} else {
+				try {
+					ResultSet r = GlobalVariables.statement.executeQuery(String.format(
+							"CALL checkout(0, %d, '%s', '', '', '', '', @success);", GlobalVariables.userID, address));
+					r = GlobalVariables.statement.executeQuery("Select @success;");
+					if (r.next() && r.getInt("@success") != 0) {
+							JOptionPane.showMessageDialog(null, "ORDER CONFIRMED!", "Order Confirmation",
+									JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							JOptionPane.showMessageDialog(null, "INSUFFICIENT BALANCE!", "Order not confirmed",
+									JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
 
-        setTitle("Checkout Page");
-        setSize(300, 200);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+				 catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 
-        add(panel);
-        setVisible(true);
-    }
-	
-	public void walletCheckout(double cartAmount) {
-		try {
-			GlobalVariables.statement.executeUpdate(
-					String.format("Update user set wallet_amount=wallet_amount- %s where id=%d", cartAmount,GlobalVariables.userID)
-					);
-			
-			
-		} catch (SQLException e1) {
-			System.err.println("Failed to connect to the database or execute stored procedure!");
-			e1.printStackTrace();
-		}
+			dispose();
+
+		});
+
+		JPanel panel = new JPanel();
+		panel.add(new JLabel("Select Payment Mode:"));
+		panel.add(paymentDropdown);
+		panel.add(new JLabel("Enter Address:"));
+		panel.add(addressField);
+		panel.add(checkoutButton);
+
+		setTitle("Checkout Page");
+		setSize(300, 200);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+
+		add(panel);
+		setVisible(true);
 	}
 }

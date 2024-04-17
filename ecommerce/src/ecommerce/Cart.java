@@ -77,7 +77,7 @@ public class Cart extends JFrame {
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 		bottomPanel.add(checkoutButton, BorderLayout.SOUTH);
 		bottomPanel.add(totalLabel, BorderLayout.NORTH);
-		bottomPanel.add(applyCouponButton, BorderLayout.CENTER); // Add the new button
+		//bottomPanel.add(applyCouponButton, BorderLayout.CENTER); // Add the new button
 		add(bottomPanel, BorderLayout.SOUTH);
 
 		// Add action listener to checkout button

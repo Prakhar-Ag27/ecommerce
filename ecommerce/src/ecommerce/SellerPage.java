@@ -192,6 +192,13 @@ public class SellerPage implements ActionListener {
 			logoutItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					try {
+						GlobalVariables.statement.close();
+						GlobalVariables.connection.close();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					// Perform logout action here
 					m.dispose();
 					new LoginPage();

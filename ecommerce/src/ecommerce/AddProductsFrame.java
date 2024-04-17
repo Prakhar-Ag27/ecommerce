@@ -2,6 +2,7 @@ package ecommerce;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AddProductsFrame extends JFrame {
@@ -61,21 +62,23 @@ public class AddProductsFrame extends JFrame {
 	}
 
 	private void addProduct() {
-        String productName = productNameField.getText();
-        String category = categoryField.getText();
-        double discount = Double.parseDouble(discountField.getText());
-        double price = Double.parseDouble(priceField.getText());
-        String description = descriptionArea.getText();
-        int quantity = Integer.parseInt(quantityField.getText());
+		String productName = productNameField.getText();
+		String category = categoryField.getText();
+		int discount = Integer.parseInt(discountField.getText());
+		double price = Double.parseDouble(priceField.getText());
+		String description = descriptionArea.getText();
+		int quantity = Integer.parseInt(quantityField.getText());
 
-        try {
-        	GlobalVariables.statement.executeUpdate(String.format("INSERT INTO `item` (`name`, `price`, `description`, `quantity`, `discount`, `category`, `seller_id`) VALUES ('%s', %f, '%s', %d, %f, '%s', %d);", productName, price, description, quantity, discount, category, GlobalVariables.userID));
-        	
+		try {
+			ResultSet r = GlobalVariables.statement.executeQuery(String.format(
+					"Call makeNewItem('%s', '%f', '%s', '%d', '%d', '%d', '%s');",
+					productName, price, description, quantity, discount, GlobalVariables.userID, category));
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(getParent(), e.getMessage(), "ERROR", JOptionPane.WARNING_MESSAGE);
 		}
-        dispose();
-        SellerPage.refreshScreen();
-    }
+		dispose();
+		SellerPage.refreshScreen();
+	}
 }
