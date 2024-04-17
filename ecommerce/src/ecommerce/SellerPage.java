@@ -200,6 +200,13 @@ public class SellerPage implements ActionListener {
 					popupMenu.setVisible(false);
 				}
 			});
+			profileItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// Perform logout action here
+					new User();
+				}
+			});
 
 			popupMenu.add(profileItem);
 			popupMenu.add(logoutItem);

@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserPage implements ActionListener {
-	maxFrame m = new maxFrame("User HomePage - ECommerce App");
+	maxFrame m = new maxFrame("ECommerce-App");
 	JLabel l = new JLabel("Welcome to User Page!");
 	JButton searchButton;
 	JButton userAvatarButton;

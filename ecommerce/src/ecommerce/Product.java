@@ -104,7 +104,7 @@ public class Product extends JFrame {
 					SellerPage.refreshScreen();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(getParent(), e1.getMessage(), "ERROR", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
