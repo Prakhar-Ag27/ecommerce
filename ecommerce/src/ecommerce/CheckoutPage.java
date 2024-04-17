@@ -47,13 +47,8 @@ public class CheckoutPage extends JFrame {
 					ResultSet r = GlobalVariables.statement.executeQuery(String.format(
 							"CALL checkout(0, %d, '%s', '', '', '', '', @success);", GlobalVariables.userID, address));
 					r = GlobalVariables.statement.executeQuery("Select @success;");
-					if (r.next() && r.getInt("@success") != 0) {
 							JOptionPane.showMessageDialog(null, "ORDER CONFIRMED!", "Order Confirmation",
 									JOptionPane.INFORMATION_MESSAGE);
-						} else {
-							JOptionPane.showMessageDialog(null, "INSUFFICIENT BALANCE!", "Order not confirmed",
-									JOptionPane.INFORMATION_MESSAGE);
-						}
 					}
 
 				 catch (SQLException e1) {

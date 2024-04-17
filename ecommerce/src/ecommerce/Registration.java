@@ -68,6 +68,8 @@ public class Registration extends JFrame {
 
 				try {
 					GlobalVariables.statement.executeUpdate(sql);
+					JOptionPane.showMessageDialog(Registration.this, "Registration successful!");
+					dispose();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(getParent(), e1.getMessage(), "ERROR", JOptionPane.WARNING_MESSAGE);
