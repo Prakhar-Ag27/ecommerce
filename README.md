@@ -10,7 +10,7 @@ JDBC (Java Database Connectivity): For connecting Java applications with the MyS
 Installation
 Clone the repository: git clone https://github.com/Prakhar-Ag27/ecommerce
 Import the project into your preferred Java IDE.
-Set up the MySQL database by executing the provided SQL script (database.sql) in your MySQL environment.
+Set up the MySQL database by executing the provided SQL script (Schema.sql) in your MySQL environment.
 Update the database connection properties in the backend code (src/GlobalVariable.java) with your MySQL credentials.
 Usage
 Run the backend server.
