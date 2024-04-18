@@ -11,7 +11,7 @@ Installation
 Clone the repository: git clone https://github.com/Prakhar-Ag27/ecommerce
 Import the project into your preferred Java IDE.
 Set up the MySQL database by executing the provided SQL script (database.sql) in your MySQL environment.
-Update the database connection properties in the backend code (src/GlobalVariable.java) with your MySQL credentials.
+Update the database connection properties in the backend code (src/GlobalVariables.java) with your MySQL credentials.
 Usage
 Run the backend server.
 Launch the frontend application.
