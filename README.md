@@ -1,4 +1,4 @@
-#eCommerce App
+#eCommerce App  
 Overview
 This project is an eCommerce application that consists of a frontend developed using Java Swing and a backend implemented with MySQL using JDBC (Java Database Connectivity).
 
